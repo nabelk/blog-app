@@ -60,6 +60,41 @@ const prismaQueries = {
       },
     });
   },
+  getPosts: async () => {
+    return await prisma.post.findMany({
+      include: {
+        _count: { select: { comments: true } },
+        tags: {
+          include: {
+            tag: true,
+          },
+        },
+      },
+    });
+  },
+  getPost: async (id) => {
+    return await prisma.post.findFirst({
+      where: {
+        id,
+      },
+      include: {
+        comments: true,
+        tags: {
+          include: {
+            tag: true,
+          },
+        },
+      },
+    });
+  },
+  getTags: async () => {
+    return await prisma.tag.findMany();
+  },
+  createCommentInPost: async (postId, name, comment) => {
+    return await prisma.comment.create({
+      data: { postId, name, comment },
+    });
+  },
 };
 
 module.exports = prismaQueries;
