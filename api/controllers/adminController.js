@@ -43,9 +43,10 @@ const getPosts = async (req, res) => {
 
 const createPost = async (req, res) => {
   const { title, content, tag } = req.body;
+  const cleanTagsArr = tag.split(",").map((tag) => tag.trim());
 
   try {
-    const post = await prisma.createPost(title, content, tag);
+    const post = await prisma.createPost(title, content, cleanTagsArr);
     return res.status(201).json({
       success: true,
       msg: "Post created successfully",
@@ -63,7 +64,6 @@ const createPost = async (req, res) => {
 const updatePostStatus = async (req, res) => {
   let { status } = req.body;
   let { id } = req.params;
-  status = status === "true" ? true : false;
   id = Number(id);
 
   try {
@@ -83,13 +83,18 @@ const updatePostStatus = async (req, res) => {
 };
 
 const updatePost = async (req, res) => {
-  let { title, content, status } = req.body;
+  let { title, content, tag } = req.body;
   let { id } = req.params;
   id = Number(id);
-  status = status === "true" ? true : false;
+  const cleanTagsArr = tag.split(",").map((tag) => tag.trim());
 
   try {
-    const postUpdate = await prisma.updatePost(id, title, content, status);
+    const postUpdate = await prisma.updatePost(
+      id,
+      title,
+      content,
+      cleanTagsArr
+    );
     return res.status(201).json({
       success: true,
       msg: `Post '${postUpdate.title}' updated succesfully`,

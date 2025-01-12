@@ -11,22 +11,20 @@ const prismaQueries = {
       },
     });
   },
-  createPost: async (title, content, tag) => {
+  createPost: async (title, content, tags) => {
     return await prisma.post.create({
       data: {
         title,
         content,
         tags: {
-          create: [
-            {
-              tag: {
-                connectOrCreate: {
-                  where: { tag },
-                  create: { tag },
-                },
+          create: tags.map((tag) => ({
+            tag: {
+              connectOrCreate: {
+                where: { tag },
+                create: { tag },
               },
             },
-          ],
+          })),
         },
       },
     });
@@ -41,7 +39,7 @@ const prismaQueries = {
       },
     });
   },
-  updatePost: async (id, title, content, published) => {
+  updatePost: async (id, title, content, tags) => {
     return await prisma.post.update({
       where: {
         id,
@@ -49,7 +47,17 @@ const prismaQueries = {
       data: {
         title,
         content,
-        published,
+        tags: {
+          deleteMany: {},
+          create: tags.map((tag) => ({
+            tag: {
+              connectOrCreate: {
+                where: { tag },
+                create: { tag },
+              },
+            },
+          })),
+        },
       },
     });
   },
