@@ -36,10 +36,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           },
         }
       );
-      console.log(response);
       const { token } = response.data;
 
       localStorage.setItem('token', token);
+      localStorage.setItem('expToken', new Date().toTimeString());
 
       router.push('/admin/dashboard');
     } catch (err: unknown) {
@@ -55,6 +55,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const logout = () => {
     localStorage.removeItem('token');
+    localStorage.removeItem('expToken');
     router.push('/admin');
   };
 
