@@ -21,7 +21,7 @@ export function Login() {
 
   return (
     <>
-      <div className='flex h-screen w-screen items-center overflow-hidden px-2'>
+      <div className='flex h-screen w-screen justify-center items-center overflow-hidden px-2'>
         <div className='relative flex w-96 flex-col space-y-5 rounded-lg border bg-[#99B898] px-5 py-10 shadow-xl sm:mx-auto'>
           <div className='mx-auto mb-2 space-y-3'>
             <p className='text-white'>Sign in as Admin</p>
@@ -36,6 +36,9 @@ export function Login() {
                     email: event.target.value,
                   }))
                 }
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') handleLogin();
+                }}
                 type='email'
                 id='email'
                 value={loginCredential.email}
@@ -56,6 +59,9 @@ export function Login() {
                 type='password'
                 id='password'
                 value={loginCredential.password}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') handleLogin();
+                }}
                 onChange={(event: ChangeEvent<HTMLInputElement>) =>
                   setLoginCredential((prevCredential) => ({
                     ...prevCredential,
@@ -76,8 +82,8 @@ export function Login() {
           <div className='flex w-full items-center'>
             <button
               onClick={handleLogin}
-              className={`shrink-0 inline-block w-36 rounded-lg py-3 font-bold text-white  ${
-                loading ? 'cursor-not-allowed bg-sky-400' : ' bg-sky-600'
+              className={`shrink-0 inline-block w-36 rounded-lg py-3 font-bold text-white hover:bg-slate-300 hover:text-slate-600   ${
+                loading ? 'cursor-not-allowed bg-slate-400' : ' bg-slate-600'
               }`}
             >
               {loading ? 'Loading..' : 'Login'}
