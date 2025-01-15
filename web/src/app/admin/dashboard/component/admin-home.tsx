@@ -50,11 +50,12 @@ export function AdminHome() {
         setAuth(true);
       })
       .catch((err) => {
+        setAuth(false);
         if (err.response.status === 401) {
           redirect('/admin');
         }
       });
-  }, []);
+  }, [token]);
 
   return (
     <>
