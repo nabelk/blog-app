@@ -103,6 +103,25 @@ const prismaQueries = {
       data: { postId, name, comment },
     });
   },
+  getPostsByTag: async (tagId) => {
+    return await prisma.post.findMany({
+      where: {
+        tags: {
+          some: {
+            tagId,
+          },
+        },
+      },
+      include: {
+        _count: { select: { comments: true } },
+        tags: {
+          include: {
+            tag: true,
+          },
+        },
+      },
+    });
+  },
 };
 
 module.exports = prismaQueries;

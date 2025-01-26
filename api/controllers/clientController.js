@@ -36,6 +36,24 @@ const getPost = async (req, res) => {
   }
 };
 
+const getPostsByTag = async (req, res) => {
+  const { tagId } = req.params;
+  try {
+    const post = await prisma.getPostsByTag(Number(tagId));
+    return res.status(201).json({
+      success: true,
+      msg: `Posts with tag successfully fetched`,
+      post,
+    });
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      message: "Failed to fetch post with tag",
+      error: err.message,
+    });
+  }
+};
+
 const getTags = async (req, res) => {
   try {
     const tags = await prisma.getTags();
@@ -82,4 +100,10 @@ const createCommentInPost = async (req, res) => {
   }
 };
 
-module.exports = { getPosts, getPost, getTags, createCommentInPost };
+module.exports = {
+  getPosts,
+  getPost,
+  getTags,
+  createCommentInPost,
+  getPostsByTag,
+};
