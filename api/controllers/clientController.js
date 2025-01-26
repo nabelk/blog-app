@@ -1,4 +1,5 @@
 const prisma = require("../prisma/queries");
+const { validationResult } = require("express-validator");
 
 const getPosts = async (req, res) => {
   try {
@@ -53,6 +54,14 @@ const getTags = async (req, res) => {
 };
 
 const createCommentInPost = async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({
+      success: false,
+      errors: errors.array().map((error) => error.msg),
+    });
+  }
+
   const { name, comment } = req.body;
   let { postId } = req.params;
   postId = Number(postId);
