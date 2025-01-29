@@ -1,4 +1,6 @@
 'use client';
+import remarkGfm from 'remark-gfm';
+import ReactMarkdown from 'react-markdown';
 
 import { Data } from './admin-home';
 import { Published } from './published';
@@ -47,9 +49,12 @@ export function Articles({ posts }: Data) {
                 <Published published={article.published} postId={article.id} />
               </div>
 
-              <p className='text-gray-600 mb-4 line-clamp-3'>
+              <ReactMarkdown
+                className='mb-4 line-clamp-3 text-gray-600'
+                remarkPlugins={[remarkGfm]}
+              >
                 {article.content}
-              </p>
+              </ReactMarkdown>
               {article.tags.length > 0 && (
                 <>
                   <div className='flex flex-wrap space-x-2'>

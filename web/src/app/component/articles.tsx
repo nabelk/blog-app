@@ -1,5 +1,7 @@
 import Link from 'next/link';
 import { format } from 'date-fns';
+import remarkGfm from 'remark-gfm';
+import ReactMarkdown from 'react-markdown';
 
 export type Tags = {
   tag: {
@@ -21,11 +23,17 @@ interface Article {
   tags: Tags[];
 }
 
-export function Articles({ articles }: { articles: Article[] }) {
+export function Articles({
+  articles,
+  isTag,
+}: {
+  articles: Article[];
+  isTag: string | null;
+}) {
   return (
-    <section className='py-20'>
-      <h1 className='mb-12 text-center font-sans text-5xl font-bold'>
-        All Posts
+    <section className='py-20 pt-0 min-[1340px]:pt-28'>
+      <h1 className='mb-12 text-center font-sans text-4xl font-bold'>
+        {isTag ? `Posts with '${isTag}' tag` : 'Recent Posts'}
       </h1>
       <div className='mx-auto grid max-w-screen-lg grid-cols-1 gap-5 p-5 sm:grid-cols-2 md:grid-cols-3 lg:gap-10'>
         {articles.map((article) => {
@@ -43,9 +51,13 @@ export function Articles({ articles }: { articles: Article[] }) {
                     <p className='mb-2 text-xl font-bold text-gray-800'>
                       {article.title}
                     </p>
-                    <p className='text-md font-light text-gray-700 whitespace-pre-line line-clamp-3'>
+
+                    <ReactMarkdown
+                      className='text-md font-light text-gray-700 line-clamp-3'
+                      remarkPlugins={[remarkGfm]}
+                    >
                       {article.content}
-                    </p>
+                    </ReactMarkdown>
                     <div className='justify-starts mt-4 flex flex-wrap items-center'>
                       {article.tags.map((t) => {
                         const {
