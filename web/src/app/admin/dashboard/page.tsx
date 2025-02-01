@@ -19,7 +19,7 @@ export default function AdminPage() {
   if (tokenDecoded && tokenDecoded.exp > Date.now() / 1000)
     return (
       <>
-        <header className='p-3 px-5 flex justify-between flex-wrap'>
+        <header className='w-full p-3 pt-20 px-5 flex max-w-screen-xl overflow-hidden  md:mx-auto md:flex-row md:items-center justify-between'>
           <h1 className='text-lg font-extrabold '>Nabil Khalid</h1>
           <Logout />
         </header>
