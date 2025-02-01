@@ -16,9 +16,7 @@ interface Comment {
 export default async function ArticlePage({
   params,
 }: {
-  params: {
-    id: string;
-  };
+  params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
   const { NEXT_PUBLIC_API_URL } = process.env;
