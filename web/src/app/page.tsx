@@ -5,7 +5,7 @@ import { Sidebar } from './component/sidebar';
 export default async function Home({
   searchParams,
 }: {
-  searchParams: { tag: string; tagName: string };
+  searchParams: Promise<{ tag: string; tagName: string }>;
 }) {
   const { NEXT_PUBLIC_API_URL } = process.env;
   const { tag, tagName } = await searchParams;
