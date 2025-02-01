@@ -3,6 +3,7 @@ import { format } from 'date-fns';
 import { AddComment } from './component/add-comment';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import Link from 'next/link';
 
 interface Comment {
   id: number;
@@ -47,12 +48,13 @@ export default async function ArticlePage({
                 } = t;
 
                 return (
-                  <div
+                  <Link
                     key={id}
-                    className='mr-2 mt-1 rounded-2xl bg-orange-500 py-1.5 px-4 text-xs text-white cursor-pointer'
+                    href={`/?tag=${id}&tagName=${tag}`}
+                    className='mr-2 mt-1 rounded-2xl bg-orange-500 py-1.5 px-4 text-xs text-white cursor-pointer hover:bg-[#99B898]'
                   >
                     {tag}
-                  </div>
+                  </Link>
                 );
               }
             )}
@@ -60,8 +62,6 @@ export default async function ArticlePage({
         </header>
 
         <div className='mx-4 md:mx-auto mt-10 max-w-screen-md space-y-12 px-6 py-10 font-serif text-lg tracking-wide text-gray-700  bg-[#99B898] rounded-sm'>
-          {/* <p className='whitespace-pre-line'>{post.content}</p>
-           */}
           <ReactMarkdown
             className='prose prose-sm sm:prose lg:prose-lg '
             remarkPlugins={[remarkGfm]}
