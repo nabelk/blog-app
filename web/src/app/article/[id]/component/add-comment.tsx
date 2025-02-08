@@ -24,9 +24,9 @@ export function AddComment({
           behavior: 'smooth',
         });
         localStorage.removeItem('scrollAfterComment');
-      }, 1200);
+      }, 2000);
     }
-  }, []);
+  });
 
   async function action(data: FormData): Promise<void> {
     const [name, comment] = [data.get('name'), data.get('comment')];
