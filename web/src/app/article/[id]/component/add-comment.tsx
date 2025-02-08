@@ -17,19 +17,16 @@ export function AddComment({
   const router = useRouter();
 
   useEffect(() => {
-    window.onload = () => {
-      const shouldScroll = localStorage.getItem('scrollAfterComment');
-      if (shouldScroll === 'true') {
-        setTimeout(() => {
-          window.scrollTo({
-            top: document.body.scrollHeight,
-            behavior: 'smooth',
-          });
-          localStorage.removeItem('scrollAfterComment');
-        }, 500);
-      }
-    };
-  });
+    if (localStorage.getItem('scrollAfterComment') === 'true') {
+      setTimeout(() => {
+        window.scrollTo({
+          top: document.body.scrollHeight,
+          behavior: 'smooth',
+        });
+        localStorage.removeItem('scrollAfterComment');
+      }, 1200);
+    }
+  }, []);
 
   async function action(data: FormData): Promise<void> {
     const [name, comment] = [data.get('name'), data.get('comment')];
