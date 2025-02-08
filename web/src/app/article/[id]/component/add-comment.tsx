@@ -1,7 +1,8 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import axios, { InternalAxiosRequestConfig, isAxiosError } from 'axios';
+import { useRouter } from 'next/navigation';
 
 export function AddComment({
   postId,
@@ -13,9 +14,22 @@ export function AddComment({
   const formRef = useRef<HTMLFormElement>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [err, setErr] = useState<string | null>(null);
+  const router = useRouter();
+
+  useEffect(() => {
+    const shouldScroll = sessionStorage.getItem('scrollAfterComment');
+    if (shouldScroll === 'true') {
+      setTimeout(() => {
+        window.scrollTo({
+          top: document.body.scrollHeight,
+          behavior: 'smooth',
+        });
+        sessionStorage.removeItem('scrollAfterComment');
+      }, 500);
+    }
+  });
 
   async function action(data: FormData): Promise<void> {
-    setIsLoading(true);
     const [name, comment] = [data.get('name'), data.get('comment')];
 
     try {
@@ -31,8 +45,9 @@ export function AddComment({
           },
         }
       );
-
-      window.location.reload();
+      sessionStorage.setItem('scrollAfterComment', 'true');
+      setIsLoading(false);
+      router.refresh();
     } catch (err: unknown) {
       if (isAxiosError(err)) {
         const { response, status, config } = err;
@@ -48,7 +63,11 @@ export function AddComment({
           return;
         }
       }
-      window.location.reload();
+      setIsLoading(false);
+      setErr('Failed to create comment');
+      setTimeout(() => {
+        setErr(null);
+      }, 1000);
     }
   }
 
@@ -83,6 +102,7 @@ export function AddComment({
 
       <button
         type='submit'
+        onClick={() => setIsLoading(true)}
         className={` font-medium py-2 px-4 rounded  ${
           isLoading
             ? 'bg-slate-300 cursor-not-allowed'
