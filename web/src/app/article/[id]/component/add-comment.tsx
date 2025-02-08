@@ -17,14 +17,14 @@ export function AddComment({
   const router = useRouter();
 
   useEffect(() => {
-    const shouldScroll = sessionStorage.getItem('scrollAfterComment');
+    const shouldScroll = localStorage.getItem('scrollAfterComment');
     if (shouldScroll === 'true') {
       setTimeout(() => {
         window.scrollTo({
           top: document.body.scrollHeight,
           behavior: 'smooth',
         });
-        sessionStorage.removeItem('scrollAfterComment');
+        localStorage.removeItem('scrollAfterComment');
       }, 500);
     }
   });
@@ -45,7 +45,7 @@ export function AddComment({
           },
         }
       );
-      sessionStorage.setItem('scrollAfterComment', 'true');
+      localStorage.setItem('scrollAfterComment', 'true');
       setIsLoading(false);
       router.refresh();
     } catch (err: unknown) {
