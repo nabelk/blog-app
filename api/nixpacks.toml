@@ -5,15 +5,10 @@ nixPkgs = ["nodejs_20"]
 cmds = ["npm ci"]
 
 [phases.build]
-cmds = "npx prisma generate"
-
+cmds = ["npx prisma generate"]
 
 [start]
-cmd = [
-  "npx prisma migrate deploy",
-  "node prisma/seedAdmin.js",
-  "node server.js"
-]
+cmd = "npx prisma migrate deploy && node prisma/seedAdmin.js && node server.js"
 
 [variables]
 NODE_ENV = "production"
