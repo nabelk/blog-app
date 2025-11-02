@@ -8,6 +8,7 @@ const rateLimit = require("express-rate-limit");
 const helmet = require("helmet");
 
 app.use(helmet());
+app.set("trust proxy", true);
 app.use(
   rateLimit({
     windowMs: 15 * 60 * 1000,
