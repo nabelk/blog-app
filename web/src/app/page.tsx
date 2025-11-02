@@ -7,11 +7,19 @@ export default async function Home({
 }: {
   searchParams: Promise<{ tag: string; tagName: string }>;
 }) {
-  const { NEXT_PUBLIC_API_URL } = process.env;
+  const { NEXT_PUBLIC_API_URL, INTERNAL_TOKEN } = process.env;
   const { tag, tagName } = await searchParams;
   const { data } = tag
-    ? await axios.get(`${NEXT_PUBLIC_API_URL}/api/post/tag/${tag}`)
-    : await axios.get(`${NEXT_PUBLIC_API_URL}/api/post/all`);
+    ? await axios.get(`${NEXT_PUBLIC_API_URL}/api/post/tag/${tag}`, {
+        headers: {
+          Authorization: `Bearer ${INTERNAL_TOKEN}`,
+        },
+      })
+    : await axios.get(`${NEXT_PUBLIC_API_URL}/api/post/all`, {
+        headers: {
+          Authorization: `Bearer ${INTERNAL_TOKEN}`,
+        },
+      });
 
   return (
     <div className='flex max-[1340px]:flex-col-reverse w-[100vw] justify-center gap-10 flex-wrap'>

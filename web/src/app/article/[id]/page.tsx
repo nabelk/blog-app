@@ -19,8 +19,12 @@ export default async function ArticlePage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const { NEXT_PUBLIC_API_URL } = process.env;
-  const { data } = await axios.get(`${NEXT_PUBLIC_API_URL}/api/post/${id}`);
+  const { NEXT_PUBLIC_API_URL, INTERNAL_TOKEN } = process.env;
+  const { data } = await axios.get(`${NEXT_PUBLIC_API_URL}/api/post/${id}`, {
+    headers: {
+      Authorization: `Bearer ${INTERNAL_TOKEN}`,
+    },
+  });
   const { post } = data;
 
   return (
