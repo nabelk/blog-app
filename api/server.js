@@ -4,16 +4,38 @@ const passport = require("passport");
 const jwtStrategy = require("./config/passport-jwt.js");
 const routers = require("./routes/routers.js");
 const cors = require("cors");
-const rateLimit = require("express-rate-limit");
+const { rateLimit, ipKeyGenerator } = require("express-rate-limit");
 const helmet = require("helmet");
 
 app.use(helmet());
-app.set("trust proxy", true);
 app.use(
   rateLimit({
     windowMs: 15 * 60 * 1000,
     max: 100,
     message: "Too many requests, please try again later.",
+    validate: { keyGeneratorIpFallback: false },
+    keyGenerator: (req) => {
+      const cfIp = req.headers["cf-connecting-ip"];
+      if (typeof cfIp === "string") {
+        console.log(`[Rate Limit] CF-IP: ${cfIp}`);
+        return cfIp;
+      }
+
+      const xForwardedFor = req.headers["x-forwarded-for"];
+      if (typeof xForwardedFor === "string") {
+        const ip = xForwardedFor.split(",")[0].trim();
+        console.log(`[Rate Limit] X-Forwarded-For: ${ip}`);
+        return ip;
+      }
+      if (Array.isArray(xForwardedFor) && xForwardedFor[0]) {
+        const ip = xForwardedFor[0].split(",")[0].trim();
+        console.log(`[Rate Limit] X-Forwarded-For (array): ${ip}`);
+        return ip;
+      }
+      const fallbackIp = ipKeyGenerator(req.ip || "unknown");
+      console.log(`[Rate Limit] Fallback IP: ${fallbackIp}`);
+      return fallbackIp;
+    },
   })
 );
 app.use(
